@@ -4,11 +4,20 @@ A comprehensive Python-based sentiment analysis system that scrapes social media
 
 ## ✨ Features
 
+### 🎯 **NEW! User-Driven Topic Search**
+- 🔎 **Search ANY topic** - Enter any subreddit directly in the dashboard
+- 🚀 **One-click buttons** - Quick access to science, AI, geopolitics, crypto
+- 📊 **Real-time progress** - Visual feedback during scraping and analysis
+- 🎛️ **Adjustable limits** - Control number of posts (10-100)
+- 💾 **Database stats** - See what topics are currently stored
+
+### 🤖 **Core Features**
 - 🌐 **Multi-Platform Scraping** - Collect posts from Reddit, Twitter (sample data), Hacker News
 - 🤖 **Multiple AI Models** - VADER, TextBlob, and Transformer-based sentiment analysis
 - 💾 **SQLite Database** - Persistent storage with efficient querying
 - 📊 **Interactive Dashboard** - Beautiful Streamlit web interface with charts and word clouds
 - 📈 **Real-time Analytics** - Sentiment trends, platform comparisons, engagement metrics
+- ⚡ **CLI Tools** - Flexible command-line options for power users
 - 🔄 **Automated Pipeline** - Scrape → Analyze → Visualize workflow
 
 ## 🛠️ Tech Stack
@@ -48,12 +57,39 @@ pip install -r requirements.txt
 
 ## 📖 Usage Guide
 
-### Step 1: Scrape Social Media Posts
+### 🚀 Quick Start (Recommended)
 
-Collect posts from various platforms:
+**Option 1: Dashboard (Easiest - No Code!)**
+```bash
+streamlit run dashboard.py
+```
+Then in the sidebar:
+1. Enter any subreddit (e.g., "geopolitics", "AI", "science")
+2. Click "🚀 Scrape & Analyze"
+3. Watch real-time progress
+4. View results instantly!
+
+**Option 2: Command Line (Power Users)**
+```bash
+# Default (r/technology, 25 posts)
+python scripts/quick_start.py
+
+# Custom topic
+python scripts/quick_start.py --subreddit geopolitics
+
+# More posts, different AI model
+python scripts/quick_start.py --subreddit AI --limit 100 --method transformers
+
+# Just scrape and analyze (no dashboard)
+python scripts/quick_start.py --subreddit science --no-dashboard
+```
+
+### 📝 Step-by-Step (Manual Control)
+
+#### Step 1: Scrape Social Media Posts
 
 ```bash
-python social_scraper.py
+python src/social_scraper.py
 ```
 
 This will:
@@ -62,29 +98,25 @@ This will:
 - Scrape 25 posts from r/python  
 - Scrape 20 posts from Hacker News
 
-**Total**: ~85 posts stored in `scraped_data.db`
+**Total**: ~85 posts stored in `src/scraped_data.db`
 
-### Step 2: Analyze Sentiment
-
-Run sentiment analysis on scraped posts:
+#### Step 2: Analyze Sentiment
 
 ```bash
 # Using VADER (recommended for social media)
-python analyze_sentiment.py --method vader
+python scripts/analyze_sentiment.py --method vader
 
 # Using TextBlob
-python analyze_sentiment.py --method textblob
+python scripts/analyze_sentiment.py --method textblob
 
 # Using Transformers (slower but more accurate)
-python analyze_sentiment.py --method transformers
+python scripts/analyze_sentiment.py --method transformers
 
 # Show sample results
-python analyze_sentiment.py --sample
+python scripts/analyze_sentiment.py --sample
 ```
 
-### Step 3: View Dashboard
-
-Launch the interactive dashboard:
+#### Step 3: View Dashboard
 
 ```bash
 streamlit run dashboard.py
