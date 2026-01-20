@@ -1,0 +1,27 @@
+# Web Scraping
+beautifulsoup4==4.12.2
+requests==2.31.0
+lxml==4.9.3
+
+# Data Management
+pandas==2.1.4
+sqlite3-python==1.0.0
+
+# Sentiment Analysis
+vaderSentiment==3.3.2
+textblob==0.17.1
+transformers==4.35.2
+torch==2.1.0
+
+# Visualization
+matplotlib==3.8.2
+seaborn==0.13.0
+plotly==5.18.0
+streamlit==1.29.0
+wordcloud==1.9.3
+
+# Utilities
+python-dotenv==1.0.0
+schedule==1.2.0
+numpy==1.26.2
+tqdm==4.66.1
