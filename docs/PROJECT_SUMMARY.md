@@ -8,22 +8,19 @@ Your web scraper has been successfully transformed into a **complete Sentiment A
 
 ### Core Files
 1. **database.py** - Enhanced with sentiment fields and query functions
-2. **social_scraper.py** - NEW! Scrapes Reddit, Twitter (sample), Hacker News
-3. **sentiment_analyzer.py** - NEW! 3 AI models (VADER, TextBlob, Transformers)
-4. **analyze_sentiment.py** - NEW! Main analysis script
-5. **dashboard.py** - NEW! Interactive Streamlit dashboard
+2. **social_scraper.py** - Scrapes Reddit, Twitter (sample), Hacker News
+3. **sentiment_analyzer.py** - 3 AI models (VADER, TextBlob, Transformers)
+4. **analyze_sentiment.py** - Main analysis script
+5. **dashboard.py** - Interactive Streamlit dashboard
 
 ### Utility Files
-6. **quick_start.py** - NEW! One-click setup
-7. **examples.py** - NEW! Code examples and testing
+6. **quick_start.py** - One-click setup
+7. **examples.py** - Code examples and testing
 8. **requirements.txt** - Updated with all NLP libraries
 9. **README.md** - Complete documentation
 10. **GETTING_STARTED.md** - Quick start guide
-
-### Original Files (Kept)
-- **scraper.py** - Your original web scraper
-- **scheduler.py** - Scheduling functionality
-- **.gitignore** - Git configuration
+11. **setup.py** - Package configuration
+12. **pyproject.toml** - Modern Python packaging
 
 ## 🎯 How to Build & Run
 
@@ -83,18 +80,18 @@ python sentiment_analyzer.py
    - Engagement metrics
    - Data export
 
-## 🔄 Your Web Scraper Integration
+## 🔄 Project Evolution
 
-Your existing web scraper (`scraper.py`, `database.py`) has been:
+The original web scraper has been transformed into a complete sentiment analysis system:
 
 ✅ **Enhanced** - Database now includes sentiment fields
-✅ **Extended** - New social media scraper built on your foundation
-✅ **Preserved** - Original files kept for reference
+✅ **Extended** - New social media scraper for Reddit, Twitter, Hacker News
 ✅ **Upgraded** - Production-ready with NLP capabilities
+✅ **Structured** - Professional package organization
 
-The database structure now supports both:
-- Original: Articles & Jobs tables
-- New: Posts table with sentiment analysis
+The database structure now supports:
+- **Articles & Jobs tables** - Original web scraping data
+- **Posts table** - Social media posts with sentiment analysis
 
 ## 💡 Key Features
 
@@ -116,19 +113,19 @@ The database structure now supports both:
 
 ## 🛠️ Customization Ideas
 
-1. **Add more sources**: Edit `social_scraper.py` to add new platforms
+1. **Add more sources**: Edit `src/social_scraper.py` to add new platforms
 2. **Change subreddits**: Modify the subreddit names in scraper
 3. **More posts**: Increase the `limit` parameters
 4. **Real Twitter API**: Add tweepy integration (see README)
 5. **Custom dashboards**: Modify `dashboard.py` visualizations
-6. **Schedule scraping**: Use `scheduler.py` for automation
+6. **Automation**: Set up cron jobs or Windows Task Scheduler
 
 ## 📈 Next Steps
 
-1. **Install dependencies**: `pip install -r requirements.txt`
-2. **Run quick start**: `python quick_start.py`
+1. **Install dependencies**: `pip install -e .` (installs package in dev mode)
+2. **Run quick start**: `python scripts/quick_start.py`
 3. **View dashboard**: Opens at http://localhost:8501
-4. **Explore code**: Check examples.py for usage patterns
+4. **Explore code**: Check `scripts/examples.py` for usage patterns
 5. **Customize**: Modify scrapers for your specific needs
 
 ## ⚡ Performance Notes

@@ -125,11 +125,13 @@ streamlit run dashboard.py
 Sentiment-Analysis-of-Social-Media-Posts/
 │
 ├── src/                         # Core source code
+│   ├── __init__.py             # Package initialization
 │   ├── database.py             # Database operations (SQLite)
 │   ├── social_scraper.py       # Social media scraping module
 │   └── sentiment_analyzer.py   # Multi-model sentiment analysis
 │
 ├── scripts/                     # Executable scripts
+│   ├── __init__.py             # Scripts package init
 │   ├── analyze_sentiment.py    # Main analysis script
 │   ├── quick_start.py          # One-command pipeline
 │   └── examples.py             # Usage examples and tests
@@ -138,11 +140,10 @@ Sentiment-Analysis-of-Social-Media-Posts/
 │   ├── GETTING_STARTED.md      # Quick start guide
 │   └── PROJECT_SUMMARY.md      # Project overview
 │
-├── tests/                       # Unit tests (future)
-│
 ├── main.py                      # Main entry point
 ├── dashboard.py                 # Streamlit visualization dashboard
-├── scheduler.py                 # Automated scheduling (optional)
+├── setup.py                     # Package setup configuration
+├── pyproject.toml              # Modern Python packaging
 ├── requirements.txt             # Python dependencies
 ├── README.md                    # This file
 ├── .gitignore                  # Git ignore patterns
@@ -237,13 +238,6 @@ print(f"Sentiment: {result['label']} (Score: {result['score']:.3f})")
 # Batch analysis
 texts = ["Great!", "Terrible!", "It's okay"]
 results = analyzer.batch_analyze(texts)
-```
-
-### Schedule Automatic Scraping
-
-```python
-# Edit scheduler.py to customize timing
-python scheduler.py
 ```
 
 ## 📈 Dashboard Features
@@ -363,82 +357,3 @@ For issues or questions:
 ---
 
 **Happy Analyzing! 📊😊**
-
-```
-
-## Project Structure
-
-```
-web-scraper-project/
-├── scraper.py         # Main scraper class
-├── database.py        # Database operations
-├── scheduler.py       # Task scheduling
-├── requirements.txt   # Dependencies
-└── README.md         # Documentation
-```
-
-## Configuration
-
-Edit `scraper.py` to add your own scraping targets:
-
-```python
-def scrape_custom_source(self):
-    url = "https://your-website.com"
-    response = requests.get(url, headers=self.headers)
-    soup = BeautifulSoup(response.content, 'html.parser')
-    # Extract data and insert into database
-```
-
-## Scheduling Examples
-
-Run scraper every 6 hours:
-```python
-schedule.every(6).hours.do(scheduled_scrape)
-```
-
-Run scraper every Monday:
-```python
-schedule.every().monday.at("10:30").do(scheduled_scrape)
-```
-
-## Best Practices
-
-- ✅ Always include `User-Agent` header
-- ✅ Add delays between requests
-- ✅ Respect `robots.txt` and terms of service
-- ✅ Handle errors gracefully
-- ✅ Log all activity
-- ✅ Clean up old data regularly
-
-## Deployment
-
-### Run as Background Service
-
-```bash
-# Using supervisor (Linux)
-[program:scraper]
-command=/path/to/venv/bin/python /path/to/scheduler.py
-autostart=true
-autorestart=true
-```
-
-### Docker Deployment
-
-```dockerfile
-FROM python:3.11
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-COPY . .
-CMD ["python", "scheduler.py"]
-```
-
-## License
-
-MIT License
-
-## Author
-
-Aditya Sharma
-- GitHub: https://github.com/adityashm
-- Portfolio: https://adityashm.me
