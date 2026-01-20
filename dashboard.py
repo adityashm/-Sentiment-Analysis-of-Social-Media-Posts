@@ -38,6 +38,7 @@ except ImportError:
         DATABASE_FILE
     )
 
+
 # Page configuration
 st.set_page_config(
     page_title="Social Media Sentiment Analysis",
@@ -59,6 +60,68 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
+
+# --- USER SCRAPING SECTION ---
+st.sidebar.header("🔎 Scrape New Topic")
+
+# Topic input with suggestions
+st.sidebar.markdown("**Popular Topics:**")
+col1, col2 = st.sidebar.columns(2)
+with col1:
+    if st.button("🔬 science", use_container_width=True):
+        st.session_state['subreddit'] = 'science'
+    if st.button("🤖 AI", use_container_width=True):
+        st.session_state['subreddit'] = 'artificial'
+with col2:
+    if st.button("🌍 geopolitics", use_container_width=True):
+        st.session_state['subreddit'] = 'geopolitics'
+    if st.button("💰 crypto", use_container_width=True):
+        st.session_state['subreddit'] = 'cryptocurrency'
+
+subreddit = st.sidebar.text_input(
+    "Or enter any subreddit:", 
+    value=st.session_state.get('subreddit', 'technology'),
+    key='subreddit_input'
+)
+scrape_limit = st.sidebar.slider("Number of posts to scrape:", 10, 100, 25)
+scrape_btn = st.sidebar.button("🚀 Scrape & Analyze", help="Scrape latest posts and analyze sentiment.", type="primary")
+
+if scrape_btn and subreddit:
+    progress_bar = st.sidebar.progress(0)
+    status_text = st.sidebar.empty()
+    
+    try:
+        import subprocess
+        
+        # Step 1: Scrape
+        status_text.text(f"Scraping r/{subreddit}...")
+        progress_bar.progress(33)
+        result1 = subprocess.run([
+            sys.executable, "-c",
+            f"from src.social_scraper import SocialMediaScraper; SocialMediaScraper().scrape_reddit_posts('{subreddit}', limit={scrape_limit})"
+        ], capture_output=True, text=True)
+        
+        if result1.returncode != 0:
+            st.sidebar.error(f"Scraping failed: {result1.stderr}")
+        else:
+            # Step 2: Analyze
+            status_text.text("Analyzing sentiment...")
+            progress_bar.progress(66)
+            result2 = subprocess.run([
+                sys.executable, str(project_root / "scripts" / "analyze_sentiment.py"), 
+                "--method", "vader"
+            ], capture_output=True, text=True)
+            
+            if result2.returncode != 0:
+                st.sidebar.error(f"Analysis failed: {result2.stderr}")
+            else:
+                progress_bar.progress(100)
+                status_text.text("✅ Complete!")
+                st.sidebar.success(f"Scraped {scrape_limit} posts from r/{subreddit}!")
+                st.cache_data.clear()
+                st.rerun()
+    except Exception as e:
+        st.sidebar.error(f"Error: {str(e)}")
 
 
 @st.cache_data(ttl=60)
@@ -183,11 +246,45 @@ def main():
     df = load_posts_data()
     
     if df.empty:
-        st.warning("⚠️ No analyzed posts found in the database. Please run the analysis script first.")
-        st.info("Run: `python analyze_sentiment.py`")
+        st.warning("⚠️ No analyzed posts found in the database.")
+        st.info("**Use the sidebar** to scrape a topic (e.g., 'technology', 'geopolitics') and analyze sentiment!")
         return
     
+    # Database Overview (show what's in the database)
+    st.sidebar.markdown("---")
+    st.sidebar.header("📊 Database Stats")
+    
+    # Get unique topics from content
+    try:
+        conn = sqlite3.connect(DATABASE_FILE)
+        cursor = conn.cursor()
+        cursor.execute("SELECT DISTINCT url FROM posts WHERE url LIKE '%reddit.com/r/%'")
+        urls = [row[0] for row in cursor.fetchall() if row[0]]
+        
+        # Extract subreddit names
+        subreddits = set()
+        for url in urls:
+            if '/r/' in url:
+                subreddit = url.split('/r/')[1].split('/')[0]
+                subreddits.add(subreddit)
+        
+        if subreddits:
+            st.sidebar.markdown(f"**Topics in database:** {', '.join(sorted(subreddits)[:5])}")
+        
+        cursor.execute("SELECT COUNT(*) FROM posts")
+        total_posts = cursor.fetchone()[0]
+        st.sidebar.metric("Total Posts in DB", total_posts)
+        
+        cursor.execute("SELECT COUNT(*) FROM posts WHERE sentiment_label IS NOT NULL")
+        analyzed_posts = cursor.fetchone()[0]
+        st.sidebar.metric("Analyzed Posts", analyzed_posts)
+        
+        conn.close()
+    except Exception as e:
+        pass
+    
     # Sidebar filters
+    st.sidebar.markdown("---")
     st.sidebar.header("🔍 Filters")
     
     platforms = ['All'] + list(df['platform'].unique())

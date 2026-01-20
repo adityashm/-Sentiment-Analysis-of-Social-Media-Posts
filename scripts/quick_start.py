@@ -6,6 +6,7 @@ Run this script to execute the complete sentiment analysis pipeline
 import subprocess
 import sys
 import logging
+import argparse
 from pathlib import Path
 
 # Add src to path
@@ -37,7 +38,18 @@ def run_command(command, description):
         logger.error(f"Error: {e}")
         return False
 
+def parse_args():
+    parser = argparse.ArgumentParser(description="Run scraping, sentiment analysis, and dashboard")
+    parser.add_argument("--subreddit", default="technology", help="Subreddit/topic to scrape (default: technology)")
+    parser.add_argument("--limit", type=int, default=25, help="Number of Reddit posts to fetch (default: 25)")
+    parser.add_argument("--method", choices=["vader", "textblob", "transformers"], default="vader", help="Sentiment model to use")
+    parser.add_argument("--sample", action="store_true", help="Show sample results after analysis")
+    parser.add_argument("--no-dashboard", action="store_true", help="Skip launching the Streamlit dashboard")
+    return parser.parse_args()
+
+
 def main():
+    args = parse_args()
     logger.info("""
     ╔═══════════════════════════════════════════════════════════════╗
     ║     SENTIMENT ANALYSIS OF SOCIAL MEDIA POSTS - QUICK START    ║
@@ -45,18 +57,30 @@ def main():
     """)
     
     # Step 1: Scrape data
-    if not run_command(f'"{sys.executable}" "{project_root / "src" / "social_scraper.py"}"', 
-                       "Scraping Social Media Posts"):
+    scrape_cmd = (
+        f'"{sys.executable}" -c '
+        f'"from src.social_scraper import SocialMediaScraper; '
+        f'SocialMediaScraper().scrape_reddit_posts(\"{args.subreddit}\", limit={args.limit})"'
+    )
+    if not run_command(scrape_cmd, 
+                       f"Scraping r/{args.subreddit} (limit={args.limit})"):
         logger.error("Scraping failed. Exiting...")
         return
     
     # Step 2: Analyze sentiment
-    if not run_command(f'"{sys.executable}" "{project_root / "scripts" / "analyze_sentiment.py"}" --method vader --sample', 
-                      "Analyzing Sentiment (VADER)"):
+    analyze_cmd = f'"{sys.executable}" "{project_root / "scripts" / "analyze_sentiment.py"}" --method {args.method}'
+    if args.sample:
+        analyze_cmd += " --sample"
+    if not run_command(analyze_cmd, 
+                      f"Analyzing Sentiment ({args.method.upper()})"):
         logger.error("Analysis failed. Exiting...")
         return
     
-    # Step 3: Launch dashboard
+    # Step 3: Launch dashboard (optional)
+    if args.no_dashboard:
+        logger.info("Dashboard launch skipped (--no-dashboard)")
+        return
+
     logger.info(f"\n{'='*60}")
     logger.info("LAUNCHING DASHBOARD")
     logger.info(f"{'='*60}\n")
