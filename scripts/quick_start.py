@@ -10,6 +10,7 @@ from pathlib import Path
 
 # Add src to path
 project_root = Path(__file__).parent.parent
+sys.path.insert(0, str(project_root))
 sys.path.insert(0, str(project_root / 'src'))
 
 logging.basicConfig(level=logging.INFO, format='%(message)s')

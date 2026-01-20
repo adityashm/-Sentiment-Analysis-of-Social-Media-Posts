@@ -6,17 +6,29 @@ Demonstrates all major features of the sentiment analysis system
 import sys
 from pathlib import Path
 
-# Add src to path
+# Add project root and src to path
 project_root = Path(__file__).parent.parent
+sys.path.insert(0, str(project_root))
 sys.path.insert(0, str(project_root / 'src'))
 
-from database import (
-    get_all_posts,
-    get_posts_by_platform,
-    get_posts_by_sentiment,
-    get_sentiment_statistics
-)
-from sentiment_analyzer import SentimentAnalyzer, analyze_post
+# Import from src
+try:
+    from src.database import (
+        get_all_posts,
+        get_posts_by_platform,
+        get_posts_by_sentiment,
+        get_sentiment_statistics
+    )
+    from src.sentiment_analyzer import SentimentAnalyzer, analyze_post
+except ImportError:
+    # Fallback for direct imports
+    from database import (
+        get_all_posts,
+        get_posts_by_platform,
+        get_posts_by_sentiment,
+        get_sentiment_statistics
+    )
+    from sentiment_analyzer import SentimentAnalyzer, analyze_post
 
 def test_sentiment_analyzers():
     """Test different sentiment analysis methods"""

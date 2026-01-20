@@ -8,12 +8,19 @@ import sys
 from pathlib import Path
 
 project_root = Path(__file__).parent
+sys.path.insert(0, str(project_root))
 sys.path.insert(0, str(project_root / 'src'))
 
 # Now import from src
-from social_scraper import SocialMediaScraper
-from sentiment_analyzer import SentimentAnalyzer
-from database import get_sentiment_statistics
+try:
+    from src.social_scraper import SocialMediaScraper
+    from src.sentiment_analyzer import SentimentAnalyzer
+    from src.database import get_sentiment_statistics
+except ImportError:
+    # Fallback for direct imports
+    from social_scraper import SocialMediaScraper
+    from sentiment_analyzer import SentimentAnalyzer
+    from database import get_sentiment_statistics
 
 def main():
     """Main application entry point"""

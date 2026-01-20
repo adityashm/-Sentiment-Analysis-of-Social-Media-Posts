@@ -11,19 +11,30 @@ from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 import sys
 from pathlib import Path
+from datetime import datetime
+import sqlite3
 
 # Add src to path
 project_root = Path(__file__).parent
+sys.path.insert(0, str(project_root))
 sys.path.insert(0, str(project_root / 'src'))
 
-from database import (
-    get_all_posts, 
-    get_posts_by_platform, 
-    get_posts_by_sentiment,
-    get_sentiment_statistics
-)
-from datetime import datetime
-import sqlite3
+# Import from src
+try:
+    from src.database import (
+        get_all_posts, 
+        get_posts_by_platform, 
+        get_posts_by_sentiment,
+        get_sentiment_statistics
+    )
+except ImportError:
+    # Fallback for direct imports
+    from database import (
+        get_all_posts, 
+        get_posts_by_platform, 
+        get_posts_by_sentiment,
+        get_sentiment_statistics
+    )
 
 # Page configuration
 st.set_page_config(

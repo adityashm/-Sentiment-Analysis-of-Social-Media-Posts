@@ -6,15 +6,22 @@ Analyzes sentiment for all posts in the database
 import logging
 import sys
 from pathlib import Path
+import argparse
+from tqdm import tqdm
 
-# Add src to path
+# Add project root and src to path
 project_root = Path(__file__).parent.parent
+sys.path.insert(0, str(project_root))
 sys.path.insert(0, str(project_root / 'src'))
 
-from database import get_all_posts, update_post_sentiment
-from sentiment_analyzer import SentimentAnalyzer
-from tqdm import tqdm
-import argparse
+# Now import from src
+try:
+    from src.database import get_all_posts, update_post_sentiment
+    from src.sentiment_analyzer import SentimentAnalyzer
+except ImportError:
+    # Fallback for direct imports
+    from database import get_all_posts, update_post_sentiment
+    from sentiment_analyzer import SentimentAnalyzer
 
 # Setup logging
 logging.basicConfig(
