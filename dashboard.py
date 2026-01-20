@@ -25,7 +25,8 @@ try:
         get_all_posts, 
         get_posts_by_platform, 
         get_posts_by_sentiment,
-        get_sentiment_statistics
+        get_sentiment_statistics,
+        DATABASE_FILE
     )
 except ImportError:
     # Fallback for direct imports
@@ -33,7 +34,8 @@ except ImportError:
         get_all_posts, 
         get_posts_by_platform, 
         get_posts_by_sentiment,
-        get_sentiment_statistics
+        get_sentiment_statistics,
+        DATABASE_FILE
     )
 
 # Page configuration
@@ -62,8 +64,6 @@ st.markdown("""
 @st.cache_data(ttl=60)
 def load_posts_data():
     """Load posts data from database"""
-    DATABASE_FILE = project_root / 'scraped_data.db'
-    
     try:
         conn = sqlite3.connect(DATABASE_FILE)
         query = """

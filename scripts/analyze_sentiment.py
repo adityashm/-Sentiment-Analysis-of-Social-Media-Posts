@@ -107,8 +107,8 @@ def analyze_all_posts(method='vader', reanalyze=False):
 def display_sample_results(limit=10):
     """Display sample sentiment analysis results"""
     import sqlite3
+    from src.database import DATABASE_FILE
     
-    DATABASE_FILE = project_root / 'scraped_data.db'
     conn = sqlite3.connect(DATABASE_FILE)
     cursor = conn.cursor()
     

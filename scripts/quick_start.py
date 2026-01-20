@@ -45,13 +45,13 @@ def main():
     """)
     
     # Step 1: Scrape data
-    if not run_command(f"{sys.executable} {project_root / 'src' / 'social_scraper.py'}", 
+    if not run_command(f'"{sys.executable}" "{project_root / "src" / "social_scraper.py"}"', 
                        "Scraping Social Media Posts"):
         logger.error("Scraping failed. Exiting...")
         return
     
     # Step 2: Analyze sentiment
-    if not run_command(f"{sys.executable} {project_root / 'scripts' / 'analyze_sentiment.py'} --method vader --sample", 
+    if not run_command(f'"{sys.executable}" "{project_root / "scripts" / "analyze_sentiment.py"}" --method vader --sample', 
                       "Analyzing Sentiment (VADER)"):
         logger.error("Analysis failed. Exiting...")
         return
@@ -64,7 +64,7 @@ def main():
     logger.info("📊 Dashboard will open at: http://localhost:8501")
     logger.info("⚠️  Press Ctrl+C to stop the dashboard\n")
     
-    run_command(f"{sys.executable} -m streamlit run {project_root / 'dashboard.py'}", "Dashboard")
+    run_command(f'"{sys.executable}" -m streamlit run "{project_root / "dashboard.py"}"', "Dashboard")
 
 if __name__ == "__main__":
     main()

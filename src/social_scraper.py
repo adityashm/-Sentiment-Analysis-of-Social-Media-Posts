@@ -7,7 +7,10 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 import time
-from database import create_database, insert_post
+try:
+    from .database import create_database, insert_post
+except ImportError:
+    from database import create_database, insert_post
 import logging
 import json
 
